@@ -1,0 +1,11 @@
+title User creates a new note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server->browser: JSON-object
+
+note over browser:
+Browser starts by sending new note to server via a JSON formatted payload, 
+Receives JSON formatted acceptance from server.
+end note
+
+ 
