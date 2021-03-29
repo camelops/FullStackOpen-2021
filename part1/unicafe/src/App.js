@@ -51,6 +51,18 @@ const Statistics = ({good, neutral, bad, allFeedback, feedbackList}) => {
   const averageFeedback = average(feedbackList)
   const feedbackPercentPositive = (good / allFeedback) * 100
 
+
+  if (feedbackList.length == 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        <p>
+          No feedback given
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>statistics</h1>
