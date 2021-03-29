@@ -13,6 +13,7 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [totalVotes, setVote] = useState(Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf, 0))
 
+
   function getRandomInt(maxValue) {
     return Math.floor(Math.random() * Math.floor(maxValue))
   }
@@ -20,17 +21,19 @@ const App = () => {
   const handleNextAnecdote = () => {
     let randomValue = getRandomInt(anecdotes.length - 1)
     setSelected(randomValue)
-
   }
 
   const handleUpVote = () => {
-    const copy = {...totalVotes}
+    const copy = [...totalVotes]
     copy[selected] += 1
     setVote(copy)
   }
 
+  
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>
         {anecdotes[selected]}
       </p>
@@ -39,6 +42,37 @@ const App = () => {
       </p>
       <Button handleClick={handleNextAnecdote} text='next anecdote'/>
       <Button handleClick={handleUpVote} text='vote'/>
+
+      <PopularAnecdote anecdotes={anecdotes} totalVotes={totalVotes}/>
+
+    </div>
+  )
+}
+
+const PopularAnecdote = (props) => {
+
+  function findIndexOfMaxNumber(inputArray){
+    var max = inputArray[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < inputArray.length; i++) {
+      if (inputArray[i] > max) {
+        maxIndex = i;
+        max = inputArray[i];
+      }
+    }
+    return maxIndex;
+  }
+
+  return (
+    <div>
+      <h1>Anecdote with the most votes</h1>
+      <p>
+        {props.anecdotes[findIndexOfMaxNumber(props.totalVotes)]}
+      </p>
+      <p>
+        has {props.totalVotes[findIndexOfMaxNumber(props.totalVotes)]} votes
+      </p>
     </div>
   )
 }
