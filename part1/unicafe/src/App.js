@@ -52,7 +52,7 @@ const Statistics = ({good, neutral, bad, allFeedback, feedbackList}) => {
   const feedbackPercentPositive = (good / allFeedback) * 100
 
 
-  if (feedbackList.length == 0) {
+  if (feedbackList.length === 0) {
     return (
       <div>
         <h1>statistics</h1>
@@ -66,24 +66,24 @@ const Statistics = ({good, neutral, bad, allFeedback, feedbackList}) => {
   return (
     <div>
       <h1>statistics</h1>
-      <Label text='good' value={good}/>
-      <Label text='neutral' value={neutral}/>
-      <Label text='bad' value={bad}/>
-      <Label text='all' value={allFeedback}/>
-      <Label text='average' value={averageFeedback}/>
-      <Label text='positive' value={feedbackPercentPositive} extraText='%'/>
+      <Statistic text='good' value={good}/>
+      <Statistic text='neutral' value={neutral}/>
+      <Statistic text='bad' value={bad}/>
+      <Statistic text='all' value={allFeedback}/>
+      <Statistic text='average' value={averageFeedback}/>
+      <Statistic text='positive' value={feedbackPercentPositive} extraText='%'/>
     </div>
   )
 }
 
 
-const Button  = ({handleClick, text}) => (
+const Button = ({handleClick, text}) => (
   <button onClick={handleClick}>
     {text}
   </button>
 )
 
-const Label  = ({text, value, extraText}) => (
+const Statistic = ({text, value, extraText}) => (
   <p>
     {text} {value} {extraText}
   </p>
