@@ -66,12 +66,16 @@ const Statistics = ({good, neutral, bad, allFeedback, feedbackList}) => {
   return (
     <div>
       <h1>statistics</h1>
-      <Statistic text='good' value={good}/>
-      <Statistic text='neutral' value={neutral}/>
-      <Statistic text='bad' value={bad}/>
-      <Statistic text='all' value={allFeedback}/>
-      <Statistic text='average' value={averageFeedback}/>
-      <Statistic text='positive' value={feedbackPercentPositive} extraText='%'/>
+      <table>
+        <tbody>
+          <Statistic text='good' value={good}/>
+          <Statistic text='neutral' value={neutral}/>
+          <Statistic text='bad' value={bad}/>
+          <Statistic text='all' value={allFeedback}/>
+          <Statistic text='average' value={averageFeedback}/>
+          <Statistic text='positive' value={feedbackPercentPositive} extraText='%'/>
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -84,9 +88,10 @@ const Button = ({handleClick, text}) => (
 )
 
 const Statistic = ({text, value, extraText}) => (
-  <p>
-    {text} {value} {extraText}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value} {extraText} </td>
+  </tr>
 )
 
 export default App
