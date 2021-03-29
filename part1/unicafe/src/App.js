@@ -1,76 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const handleGoodFeedback = () => {
+    setGood(good + 1)
+  }
+
+  const handleNeutralFeedback = () => {
+    setNeutral(neutral + 1)
+  }
+
+  const handleBadFeedback = () => {
+    setBad(bad + 1)
   }
 
 
   return (
-    <>
-      <Header course={course} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </>
+    <div>
+      <h1>give feedback</h1>
+      <Button handleClick={handleGoodFeedback} text='good'/>
+      <Button handleClick={handleNeutralFeedback} text='neutral'/>
+      <Button handleClick={handleBadFeedback} text='bad'/>
+
+      <h1>give feedback</h1>
+      <Label text='good' value={good}/>
+      <Label text='neutral' value={neutral}/>
+      <Label text='bad' value={bad}/>
+
+    </div>
   )
 }
 
-const Header = (props) => {
-  return (
-    <h1>{props.course.name}</h1>
-  )
-}
 
-const Content = (props) => {
+const Button  = ({handleClick, text}) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
 
-  let partsList = []
-  props.parts.forEach((item, index) => {
-    partsList.push( <Part key={index} part={item}/>)
-  })
-  
-  return (
-    <>
-      {partsList}
-    </>
-
-  )
-}
-
-const Total = (props) => {
-
-  let total = 0;
-  props.parts.forEach((item, index) => {
-    total += item.exercises;
-  })
-
-
-  return (
-    <p>
-      Number of exercises {total}
-    </p>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.part.name} {props.part.exercises}
-    </p>
-  )
-}
+const Label  = ({text, value}) => (
+  <p>
+    {text} {value}
+  </p>
+)
 
 export default App
