@@ -27,6 +27,19 @@ const App = () => {
     addFeedback(feedbackList.concat(-1))
   }
 
+  return (
+    <div>
+      <h1>give feedback</h1>
+      <Button handleClick={handleGoodFeedback} text='good'/>
+      <Button handleClick={handleNeutralFeedback} text='neutral'/>
+      <Button handleClick={handleBadFeedback} text='bad'/>
+      <Statistics good={good} neutral={neutral} bad={bad} allFeedback={allFeedback} feedbackList={feedbackList}/>
+    </div>
+  )
+}
+
+const Statistics = ({good, neutral, bad, allFeedback, feedbackList}) => {
+  
   let average = (inputArray) => {
     let total = 0;
     for (let i = 0; i < inputArray.length; i++) {
@@ -40,11 +53,6 @@ const App = () => {
 
   return (
     <div>
-      <h1>give feedback</h1>
-      <Button handleClick={handleGoodFeedback} text='good'/>
-      <Button handleClick={handleNeutralFeedback} text='neutral'/>
-      <Button handleClick={handleBadFeedback} text='bad'/>
-
       <h1>statistics</h1>
       <Label text='good' value={good}/>
       <Label text='neutral' value={neutral}/>
@@ -52,7 +60,6 @@ const App = () => {
       <Label text='all' value={allFeedback}/>
       <Label text='average' value={averageFeedback}/>
       <Label text='positive' value={feedbackPercentPositive} extraText='%'/>
-
     </div>
   )
 }
