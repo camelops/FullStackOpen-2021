@@ -55,45 +55,58 @@ const addNewName = (event) => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with a <input
-          value={newSearch}
-          onChange={handleSearchChange}
-        />
-      </div>
+      <Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <h2>add a new</h2>
-      <form onSubmit={addNewName}>
-        <div>
-          name: <input 
-           value={newName}
-           onChange={handleNameChange}
-           />
-        </div>
-        <div>
-          number: <input 
-          value={newNumber}
-          onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addNewName={addNewName}/>
       <h2>Numbers</h2>
-      <div>
-        <table>
-          <tbody>
-              {(persons.filter(person => person.name.toLowerCase().includes(newSearch.toLowerCase()))).map(person => 
-                <tr key={person.name}>
-                  <td>{person.name} </td>
-                  <td>{person.number} </td>
-                </tr>
-              )}
-          </tbody>
-        </table>
-      </div>
+      <Persons persons={persons} newSearch={newSearch} />
+
     </div>
   )
 }
+
+const Filter = ({newSearch, handleSearchChange}) => (
+  <div>
+    filter shown with a <input
+      value={newSearch}
+      onChange={handleSearchChange}
+    />
+  </div>  
+)
+
+const PersonForm = ({newName, newNumber, handleNameChange, handleNumberChange, addNewName}) => (
+  <form onSubmit={addNewName}>
+  <div>
+    name: <input 
+     value={newName}
+     onChange={handleNameChange}
+     />
+  </div>
+  <div>
+    number: <input 
+    value={newNumber}
+    onChange={handleNumberChange}
+    />
+  </div>
+  <div>
+    <button type="submit">add</button>
+  </div>
+</form>
+)
+
+const Persons = ({persons, newSearch}) => (
+  <div>
+    <table>
+      <tbody>
+          {(persons.filter(person => person.name.toLowerCase().includes(newSearch.toLowerCase()))).map(person => 
+            <tr key={person.name}>
+              <td>{person.name} </td>
+              <td>{person.number} </td>
+            </tr>
+          )}
+      </tbody>
+    </table>
+  </div>
+)
 
 export default App
