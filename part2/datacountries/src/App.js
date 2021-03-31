@@ -41,7 +41,20 @@ const Filter = ({newSearch, handleSearchChange}) => (
 
 const CountryList = ({countries, newSearch}) => {
 
+  const [ shouldShow, setShouldShow ] = useState({})
+  
+
   const filteredCountries = countries.filter(country => country.name.toLowerCase().includes(newSearch.toLowerCase()))
+
+  const handleShowCountry = (country) => {
+    setShouldShow(country)
+  }
+
+  let showCountry
+  if (Object.keys(shouldShow).length > 0) {
+    const flagAltText = `flag of ${shouldShow.name}`
+    showCountry = <CountryDisplay country={shouldShow} flagAltText={flagAltText}/>
+  }
 
   if (filteredCountries.length > 10) {
     return (
@@ -51,62 +64,43 @@ const CountryList = ({countries, newSearch}) => {
     )
   } if (filteredCountries.length === 1) {
     const selected = filteredCountries[0]
+    const flagAltText = `flag of ${selected.name}`
     return (
-        <div>
-          <h1>{selected.name}</h1>
-          <p>capital {selected.capital}</p>
-          <p>population {selected.population}</p>
-          <h2>languages</h2>
-          <ul>
-            {selected.languages.map(language => 
-              <li key={language.name}>{language.name}</li>
-            )}
-          </ul>
-          <img src={selected.flag} height="100"></img>
-          
-        </div>
+        <CountryDisplay country={selected} flagAltText={flagAltText}/>
     )
   } else {
     return (
-      <table>
-        <tbody>
-          {(countries.filter(country => country.name.toLowerCase().includes(newSearch.toLowerCase()))).map(country => 
-            <tr key={country.name}>
-              <td>{country.name} </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <div>
+        <table>
+          <tbody>
+            {(countries.filter(country => country.name.toLowerCase().includes(newSearch.toLowerCase()))).map(country => 
+              <tr key={country.name}>
+                <td>{country.name} </td>
+                <td><button onClick={() => {handleShowCountry(country)}}>show</button></td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      {showCountry}
+      </div>
+      
     )
   }
 }
 
-const PopularAnecdote = (props) => {
-
-  function findIndexOfMaxNumber(inputArray){
-    var max = inputArray[0];
-    var maxIndex = 0;
-
-    for (var i = 1; i < inputArray.length; i++) {
-      if (inputArray[i] > max) {
-        maxIndex = i;
-        max = inputArray[i];
-      }
-    }
-    return maxIndex;
-  }
-
-  return (
-    <div>
-      <h1>Anecdote with the most votes</h1>
-      <p>
-        {props.anecdotes[findIndexOfMaxNumber(props.totalVotes)]}
-      </p>
-      <p>
-        has {props.totalVotes[findIndexOfMaxNumber(props.totalVotes)]} votes
-      </p>
-    </div>
-  )
-}
+const CountryDisplay = ({country, flagAltText}) => (
+  <div>
+    <h1>{country.name}</h1>
+    <p>capital {country.capital}</p>
+    <p>population {country.population}</p>
+    <h2>languages</h2>
+    <ul>
+      {country.languages.map(language => 
+        <li key={language.name}>{language.name}</li>
+      )}
+    </ul>
+    <img src={country.flag} height="100" alt={flagAltText}></img>
+  </div>
+)
 
 export default App;
