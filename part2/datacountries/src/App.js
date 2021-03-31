@@ -88,19 +88,64 @@ const CountryList = ({countries, newSearch}) => {
   }
 }
 
-const CountryDisplay = ({country, flagAltText}) => (
-  <div>
-    <h1>{country.name}</h1>
-    <p>capital {country.capital}</p>
-    <p>population {country.population}</p>
-    <h2>languages</h2>
-    <ul>
-      {country.languages.map(language => 
-        <li key={language.name}>{language.name}</li>
-      )}
-    </ul>
-    <img src={country.flag} height="100" alt={flagAltText}></img>
-  </div>
-)
+const CountryDisplay = ({country, flagAltText}) => {
+  return(
+    <div>
+      <h1>{country.name}</h1>
+      <p>capital {country.capital}</p>
+      <p>population {country.population}</p>
+      <h2>Spoken Languages</h2>
+      <ul>
+        {country.languages.map(language => 
+          <li key={language.name}>{language.name}</li>
+        )}
+      </ul>
+      <img src={country.flag} height="100" alt={flagAltText}></img>
+      <WeatherDisplay city={country.capital}/>
+    </div>
+  )
+}
+
+const WeatherDisplay = ({city}) => {
+
+  const [ weather, setWeather ] = useState([])
+  
+  // Retrieve list of countries
+  const hook = () => {
+    const api_key = (process.env.REACT_APP_API_KEY).replace(/'/g,"").trim();
+    console.log(api_key);
+    const weatherAPILink = "http://api.weatherstack.com/current?access_key=" + api_key + "&query=" + city
+    console.log(weatherAPILink);
+    axios
+      .get(weatherAPILink)
+      .then(response => {
+        console.log(response.data);
+        setWeather(response.data)
+      })
+  }
+  
+  useEffect(hook, [city])
+
+  if(Object.keys(weather).length > 0) {
+    return (
+      <div>
+        <h2>Weather in {city}</h2>
+        <p>temperature: {weather.current.temperature} Celsius</p>
+        <img src={weather.current.weather_icons[0]} height="100" alt={weather.current.weather_descriptions[0]}></img>
+        <p>Wind: {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        
+      </div>
+    )
+  }
+
+
+}
+
+
 
 export default App;
