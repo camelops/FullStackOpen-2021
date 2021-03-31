@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react'
+import personService from './services/persons'
 import axios from 'axios'
 
 const App = () => {
@@ -6,21 +7,20 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newSearch, setNewSearch ] = useState('')
-
-  // Retrieve list of entries in phonebook
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }
   
-  useEffect(hook, [])
 
-const addNewName = (event) => {
+
+
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
+
+// Adding an entry to the phonebook
+  const addNewName = (event) => {
     event.preventDefault()
 
     function nameExists(name) {
@@ -41,10 +41,14 @@ const addNewName = (event) => {
       name: newName,
       number: newNumber
     }
-  
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+
+    personService
+    .create(personObject)
+      .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
   }
 
   const handleNameChange = (event) => {
