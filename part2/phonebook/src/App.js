@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react'
 import personService from './services/persons'
-import axios from 'axios'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -8,9 +7,6 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ newSearch, setNewSearch ] = useState('')
   
-
-
-
   useEffect(() => {
     personService
       .getAll()
@@ -63,6 +59,29 @@ const App = () => {
     setNewSearch(event.target.value)
     console.log(newSearch)
   }
+
+  const deletePerson = (id) => {
+    const array = [...persons]
+    const index = persons.findIndex(element => element.id ===id)
+
+    if (window.confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+      if (index !== -1) {
+        array.splice(index, 1)
+      }
+    
+      personService
+      .deleteEntry(id, array)
+        .then(setPersons(array))
+      
+      .catch(error => {
+        alert(
+          `the person '${id}' was already deleted from server`
+        )
+      }) 
+    }
+  }
+
+  console.log("WARNING3")
   
 
   return (
@@ -72,7 +91,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addNewName={addNewName}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} newSearch={newSearch} />
+      <Persons persons={persons} newSearch={newSearch} deletePerson={deletePerson}/>
 
     </div>
   )
@@ -107,7 +126,7 @@ const PersonForm = ({newName, newNumber, handleNameChange, handleNumberChange, a
 </form>
 )
 
-const Persons = ({persons, newSearch}) => (
+const Persons = ({persons, newSearch, deletePerson}) => (
   <div>
     <table>
       <tbody>
@@ -115,6 +134,7 @@ const Persons = ({persons, newSearch}) => (
             <tr key={person.name}>
               <td>{person.name} </td>
               <td>{person.number} </td>
+              <td><button onClick={() => deletePerson(person.id)}>delete</button></td>
             </tr>
           )}
       </tbody>
