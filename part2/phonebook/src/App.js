@@ -26,12 +26,31 @@ const App = () => {
     }
 
     if (nameExists(newName)) {
-      console.log("MATCH");
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const id = persons[persons.findIndex(element => element.name === newName)].id
+
+        const personObject = {
+          name: newName,
+          number: newNumber
+        }
+
+        personService
+        .update(id, personObject)
+          .then(response => {
+            return personService.getAll()
+          })
+          .then(persons => {
+            setPersons(persons)
+            setNewName('')
+            setNewNumber('')
+          })
+      }
       setNewName('')
       setNewNumber('')
       return
-    }
+
+      }
+    
 
     const personObject = {
       name: newName,
@@ -62,7 +81,7 @@ const App = () => {
 
   const deletePerson = (id) => {
     const array = [...persons]
-    const index = persons.findIndex(element => element.id ===id)
+    const index = persons.findIndex(element => element.id === id)
 
     if (window.confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
       if (index !== -1) {
