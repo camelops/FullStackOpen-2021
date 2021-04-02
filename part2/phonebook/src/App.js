@@ -1,11 +1,15 @@
 import React, { useState, useEffect} from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newSearch, setNewSearch ] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+
   
   useEffect(() => {
     personService
@@ -36,14 +40,24 @@ const App = () => {
 
         personService
         .update(id, personObject)
-          .then(response => {
-            return personService.getAll()
-          })
-          .then(persons => {
-            setPersons(persons)
-            setNewName('')
-            setNewNumber('')
-          })
+        .catch(error => {
+          setErrorMessage(`'${newName}' was already deleted from the server.`)
+          return
+        })
+        .then(response => {
+          return personService.getAll()
+        })
+        .then(persons => {
+          setSuccessMessage(
+            `'${newName}' number was updated`
+          )
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+          setPersons(persons)
+          setNewName('')
+          setNewNumber('')
+        })
       }
       setNewName('')
       setNewNumber('')
@@ -59,11 +73,17 @@ const App = () => {
 
     personService
     .create(personObject)
-      .then(returnedPerson => {
+    .then(returnedPerson => {
+      setSuccessMessage(
+        `'${newName}' was added to the phonebook`
+      )
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
-    })
+  })
   }
 
   const handleNameChange = (event) => {
@@ -76,7 +96,6 @@ const App = () => {
 
   const handleSearchChange = (event) => {
     setNewSearch(event.target.value)
-    console.log(newSearch)
   }
 
   const deletePerson = (id) => {
@@ -99,8 +118,6 @@ const App = () => {
       }) 
     }
   }
-
-  console.log("WARNING3")
   
 
   return (
@@ -108,6 +125,8 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <h2>add a new</h2>
+      <SuccessNotification message={successMessage} />
+      <ErrorNotification message={errorMessage} />
       <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addNewName={addNewName}/>
       <h2>Numbers</h2>
       <Persons persons={persons} newSearch={newSearch} deletePerson={deletePerson}/>
@@ -160,5 +179,29 @@ const Persons = ({persons, newSearch, deletePerson}) => (
     </table>
   </div>
 )
+
+const SuccessNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="success">
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 
 export default App
