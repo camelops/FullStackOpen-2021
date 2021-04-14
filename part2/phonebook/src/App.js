@@ -83,7 +83,12 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
-  })
+       })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(`${error}`)
+        return
+    })
   }
 
   const handleNameChange = (event) => {
